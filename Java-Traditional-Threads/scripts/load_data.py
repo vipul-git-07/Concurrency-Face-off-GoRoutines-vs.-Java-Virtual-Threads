@@ -3,13 +3,14 @@ import json
 import time
 
 # RabbitMQ connection parameters
-rabbitmq_host = "rabbitmq"
-queue_name = "test_queue"
+rabbitmq_host = "localhost"
+queue_name = "my_queue"
 
 # Retry mechanism
 for attempt in range(1000):  # Retry up to 10 times
     try:
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
+        credentials = pika.PlainCredentials(username="guest", password="guest")
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host,port=5672, credentials=credentials))
         channel = connection.channel()
         break
     except pika.exceptions.AMQPConnectionError:
